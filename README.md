@@ -31,6 +31,8 @@ yo deslight
 
 Afterwards, modify `package.json`, namely the `name` property.
 
+Now you can run `gulp` to start the project!
+
 ## License
 
 MIT
