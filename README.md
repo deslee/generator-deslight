@@ -1,6 +1,6 @@
-# generator-deslight [![Build Status](https://secure.travis-ci.org/deslee/generator-deslight.png?branch=master)](https://travis-ci.org/deslee/generator-deslight)
+# generator-deslight
 
-> [Yeoman](http://yeoman.io) generator
+> A [Yeoman](http://yeoman.io) generator for lightning fast web application development
 
 ## Getting Started
 
