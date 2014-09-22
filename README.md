@@ -25,6 +25,7 @@ npm install -g generator-deslight
 Finally, initiate the generator:
 
 ```bash
+cd {my-app-name}
 yo deslight
 ```
 
