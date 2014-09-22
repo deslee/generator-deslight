@@ -1,14 +1,17 @@
 {
   "name": "generator-deslight",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A Yeoman generator for lightning fast webapps",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "deslee/generator-deslight",
   "author": {
     "name": "Desmond Lee",
     "email": "desmond.lee.public@gmail.com",
     "url": "https://github.com/deslee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/deslee/generator-deslight"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -20,7 +23,13 @@
     "app"
   ],
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "gulp",
+    "livereload",
+    "web",
+    "app",
+    "webapp",
+    "front-end"
   ],
   "dependencies": {
     "yeoman-generator": "^0.17.0",
