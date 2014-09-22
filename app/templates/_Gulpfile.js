@@ -63,6 +63,7 @@ gulp.task('serve', function() {
 	gulp.src('./build')
 		.pipe(webserver({
 			port: process.env.PORT || 8000,
+			open: true
 		}));
 });
 
