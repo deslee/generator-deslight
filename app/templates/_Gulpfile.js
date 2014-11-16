@@ -5,6 +5,7 @@ var preprocess = require('gulp-preprocess');
 var process = require('process');
 var livereload = require('gulp-livereload');
 var webserver = require('gulp-webserver');
+var sass = require('gulp-sass');
 
 var build_options = {
 	'isDev': true
