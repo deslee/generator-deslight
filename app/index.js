@@ -39,7 +39,7 @@ var DeslightGenerator = yeoman.generators.Base.extend({
       this.src.copy('_bower.json', 'bower.json');
       this.src.copy('_Gulpfile.js', 'Gulpfile.js');
 
-      this.src.copy('_app/app.css', 'app/app.css');
+      this.src.copy('_app/app.scss', 'app/app.scss');
       this.src.copy('_app/index.html', 'app/index.html');
       this.src.copy('_app/noop.js', 'app/noop.js');
 
