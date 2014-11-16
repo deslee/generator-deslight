@@ -36,3 +36,8 @@ Now you can run `gulp` to start the project!
 ## License
 
 MIT
+
+## Updates
+
+0.2: added sass
+
