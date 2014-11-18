@@ -42,6 +42,7 @@ var DeslightGenerator = yeoman.generators.Base.extend({
       this.src.copy('_app/app.scss', 'app/app.scss');
       this.src.copy('_app/index.html', 'app/index.html');
       this.src.copy('_app/noop.js', 'app/noop.js');
+      this.src.copy('_app/main.js', 'app/main.js');
 
     },
 

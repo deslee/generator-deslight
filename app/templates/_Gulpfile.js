@@ -59,14 +59,22 @@ gulp.task('move:html', function() {
 		.pipe(gulp.dest('./build'));
 });
 
-gulp.task('move', ['move:html', 'move:css']);
+gulp.task('move:static', function() {
+  gulp.src('./app/static/**/*')
+    .pipe(gulp.dest('./build/static'));
+
+  gulp.src('./bower_components/**/*')
+    .pipe(gulp.dest('./build/bower_components'));
+});
+
+gulp.task('move', ['move:html', 'move:css', 'move:static']);
 
 gulp.task('serve', function() {
 	gulp.src('./build')
 		.pipe(webserver({
-			port: process.env.PORT || 8000,
-			open: true
+			port: process.env.PORT || 8000
 		}));
+  livereload.listen();
 });
 
 gulp.task('watch', function() {
@@ -81,7 +89,7 @@ gulp.task('watch', function() {
 
 	watch('./app/index.html', 'move:html');
 	watch('./app/**/*.js', 'build:app');
-	watch('./app/app.css', 'move:css');
+	watch('./app/app.scss', 'move:css');
 });
 
 gulp.task('build', ['build:vendor', 'build:app']);
