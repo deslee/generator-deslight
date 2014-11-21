@@ -6,6 +6,7 @@ var process = require('process');
 var livereload = require('gulp-livereload');
 var webserver = require('gulp-webserver');
 var sass = require('gulp-sass');
+var runSequence = require('run-sequence');
 
 var build_options = {
 	'isDev': true
@@ -15,8 +16,11 @@ var external_libraries = [
 	'jquery'
 ];
 
+/**
+ * Browserify the external vendors and move them to ./build
+ **/
 gulp.task('build:vendor', function() {
-	gulp.src('./app/noop.js', {read: false})
+  return gulp.src('./app/noop.js', {read: false})
 		.pipe(browserify({
 			debug: process.env.NODE_ENV != 'production'
 		}))
@@ -29,8 +33,11 @@ gulp.task('build:vendor', function() {
 		.pipe(gulp.dest('./build'));
 });
 
+/**
+ * Browserify the main file and move it to ./build
+ **/
 gulp.task('build:app', function() {
-	gulp.src('./app/main.js', {read: false})
+  return gulp.src('./app/main.js', {read: false})
 		.pipe(browserify({
 			transform: [],
 			debug: process.env.NODE_ENV != 'production'
@@ -45,69 +52,81 @@ gulp.task('build:app', function() {
 		.pipe(gulp.dest('./build'));
 });
 
+/**
+ * Precompile the style and move it to ./build
+ **/
 gulp.task('move:css', function() {
-  gulp.src('./app/app.scss')
+  return gulp.src('./app/app.scss')
     .pipe(sass())
     .pipe(gulp.dest('./build'));
 });
 
+/**
+ * Preprocess index.html and move it to ./build
+ **/
 gulp.task('move:html', function() {
-	gulp.src('./app/index.html')
+  return gulp.src('./app/index.html')
 		.pipe(preprocess({
 			context: build_options
 		}))
 		.pipe(gulp.dest('./build'));
 });
 
+/**
+ * Move the static assets to ./build
+ **/
 gulp.task('move:static', function() {
-  gulp.src('./app/static/**/*')
-    .pipe(gulp.dest('./build/static'));
-
-  gulp.src('./bower_components/**/*')
-    .pipe(gulp.dest('./build/bower_components'));
+  return gulp.src('./app/assets/**/*')
+    .pipe(gulp.dest('./build/assets'));
 });
 
-gulp.task('move', ['move:html', 'move:css', 'move:static']);
+gulp.task('build', function(cb) {
+  runSequence(['build:vendor', 'build:app'], cb)
+});
+
+gulp.task('move', function(cb) {
+  runSequence(['move:html', 'move:css', 'move:static'], cb);
+});
+
+gulp.task('main', function(cb) {
+  runSequence('build', 'move', cb);
+});
 
 gulp.task('serve', function() {
-	gulp.src('./build')
-		.pipe(webserver({
-			port: process.env.PORT || 8000
-		}));
-  livereload.listen();
+  return gulp.src('./build')
+    .pipe(webserver({
+      port: process.env.PORT || 8000
+    }));
 });
 
 gulp.task('watch', function() {
-	var watch = function(path, task) {
-		gulp.watch(path, function(events) {
-			console.log(events.path + ' changed. running task ' + task + '.');
-			gulp.start(task);
-			livereload.changed(events.path);
-		}).on('change', function(file) {
-		});
-	}
+  var watch = function(path, task) {
+    gulp.watch(path, function(events) {
+      console.log(events.path + ' changed. running task ' + task + '.');
+      gulp.start(task);
+      livereload.changed(events.path);
+    }).on('change', function(file) {
+    });
+  };
 
-	watch('./app/index.html', 'move:html');
-	watch('./app/**/*.js', 'build:app');
-	watch('./app/app.scss', 'move:css');
+  livereload.listen();
+
+  watch('./app/index.html', 'move:html');
+  watch('./app/**/*.js', 'build:app');
+  watch('./app/app.scss', 'move:css');
+  watch('./app/assets/**/*', 'move:static');
 });
 
-gulp.task('build', ['build:vendor', 'build:app']);
-
-gulp.task('main', ['build', 'move', 'serve']);
-
-gulp.task('dev', function() {
-	build_options.isDev = true;
-	gulp.start(['main', 'watch']);
-});
-
-gulp.task('production', function() {
-	build_options.isDev = false;
-	gulp.start(['main']);
-});
-
-gulp.task('default', function() {
+gulp.task('default', function(cb) {
 	build_options.isDev = process.env.NODE_ENV != 'production';
 	console.log("running in " + (build_options.isDev ? 'development mode' : 'production mode'));
-	gulp.start((build_options.isDev ? 'dev' : 'production'));
+  if (build_options.isDev) {
+    build_options.isDev = true;
+    runSequence('main', 'watch', 'serve', cb);
+  }
+  else {
+    build_options.isDev = false;
+    runSequence('main', cb);
+  }
 });
+
