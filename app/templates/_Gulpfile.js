@@ -103,8 +103,9 @@ gulp.task('watch', function() {
   var watch = function(path, task) {
     gulp.watch(path, function(events) {
       console.log(events.path + ' changed. running task ' + task + '.');
-      gulp.start(task);
-      livereload.changed(events.path);
+      runSequence(task, function() {
+        livereload.changed(events.path);
+      })
     }).on('change', function(file) {
     });
   };
