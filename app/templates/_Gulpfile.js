@@ -75,9 +75,14 @@ gulp.task('move:html', function() {
 /**
  * Move the static assets to ./build
  **/
-gulp.task('move:static', function() {
+gulp.task('move:assets', function() {
   return gulp.src('./app/assets/**/*')
     .pipe(gulp.dest('./build/assets'));
+});
+
+gulp.task('move:bower', function() {
+  return gulp.src('./bower_components/**/*')
+    .pipe(gulp.dest('./build/bower_components'));
 });
 
 gulp.task('build', function(cb) {
@@ -85,7 +90,7 @@ gulp.task('build', function(cb) {
 });
 
 gulp.task('move', function(cb) {
-  runSequence(['move:html', 'move:css', 'move:static'], cb);
+  runSequence(['move:html', 'move:css', 'move:assets', 'move:bower'], cb);
 });
 
 gulp.task('main', function(cb) {
@@ -115,7 +120,7 @@ gulp.task('watch', function() {
   watch('./app/index.html', 'move:html');
   watch('./app/**/*.js', 'build:app');
   watch('./app/app.scss', 'move:css');
-  watch('./app/assets/**/*', 'move:static');
+  watch('./app/assets/**/*', 'move:assets');
 });
 
 gulp.task('default', function(cb) {
