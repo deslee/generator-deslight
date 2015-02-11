@@ -2,7 +2,5 @@
   "name": "package",
   "version": "0.0.0",
   "dependencies": {
-    "foundation": "~5.4.7"
   }
 }
-
