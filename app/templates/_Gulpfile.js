@@ -122,7 +122,7 @@ gulp.task('watch', function() {
 
   watch('./app/index.html', 'move:html');
   watch('./app/**/*.js', 'build:app');
-  watch('./app/*/*.scss', 'move:css');
+  watch('./app/**/*.scss', 'move:css');
   watch('./app/assets/**/*', 'move:assets');
 });
 
