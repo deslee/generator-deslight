@@ -1,6 +1,6 @@
 {
   "name": "generator-deslight",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "A Yeoman generator for lightning fast web application development",
   "license": "MIT",
   "main": "app/index.js",

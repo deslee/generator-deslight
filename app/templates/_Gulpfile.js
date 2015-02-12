@@ -7,6 +7,7 @@ var livereload = require('gulp-livereload');
 var webserver = require('gulp-webserver');
 var sass = require('gulp-sass');
 var runSequence = require('run-sequence');
+var sourcemaps = require('gulp-sourcemaps');
 
 var build_options = {
 	'isDev': true
@@ -57,7 +58,9 @@ gulp.task('build:app', function() {
  **/
 gulp.task('move:css', function() {
   return gulp.src('./app/app.scss')
+    .pipe(sourcemaps.init())
     .pipe(sass())
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('./build'));
 });
 
@@ -119,7 +122,7 @@ gulp.task('watch', function() {
 
   watch('./app/index.html', 'move:html');
   watch('./app/**/*.js', 'build:app');
-  watch('./app/app.scss', 'move:css');
+  watch('./app/*/*.scss', 'move:css');
   watch('./app/assets/**/*', 'move:assets');
 });
 
