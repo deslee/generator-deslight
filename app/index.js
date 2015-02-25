@@ -69,7 +69,7 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 				},
 				{
 					value: 'react',
-					name: 'ReactJS'
+					name: 'Flux / React with React Router'
 				}]
 			}];
 
@@ -145,7 +145,12 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 	_handle_react_package: function(pkgs) {
 		this.browserify_transforms.push('reactify');
 		pkgs.devDependencies.reactify = '*'
-		this.props.libs = this.props.libs.concat(this.react_libraries);
+		this.props.libs = this.props.libs.concat(this.react_libraries.map(function(lib) {
+			if (lib == 'react') {
+				return 'react/addons'
+			}				
+			return lib;
+		}));
 
 		this.copy('_react/routes/HomeRouteHandler.js', 'app/routes/HomeRouteHandler.js');
 		this.copy('_react/routes/RootRouteHandler.js', 'app/routes/RootRouteHandler.js');
