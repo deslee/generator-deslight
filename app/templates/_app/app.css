@@ -20,7 +20,8 @@ dd {
 	list-style-type: circle;
 	list-style-position: inside;
 	display: list-item;
-	&:last-child {
-		margin-bottom: 1em;
-	}
+}
+
+dd:last-child {
+	margin-bottom: 1em;
 }

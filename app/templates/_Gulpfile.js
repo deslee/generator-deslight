@@ -5,7 +5,13 @@ var preprocess = require('gulp-preprocess');
 var process = require('process');
 var livereload = require('gulp-livereload');
 var webserver = require('gulp-webserver');
+<% if (props.css_preprocessor == 'sass') { %>
 var sass = require('gulp-sass');
+<% } %>
+<% if (props.css_preprocessor == 'less') { %>
+var less = require('gulp-less');
+<% } %>
+
 var runSequence = require('run-sequence');
 var sourcemaps = require('gulp-sourcemaps');
 
@@ -14,7 +20,6 @@ var build_options = {
 };
 
 var external_libraries = [
-	'jquery'
 ];
 
 /**
@@ -40,7 +45,7 @@ gulp.task('build:vendor', function() {
 gulp.task('build:app', function() {
   return gulp.src('./app/main.js', {read: false})
 		.pipe(browserify({
-			transform: <%= browserify_transforms %>,
+			transform: <%= JSON.stringify(browserify_transforms) %>,
 			debug: process.env.NODE_ENV != 'production'
 		}))
 		.on('prebundle', function(bundle) {
@@ -57,10 +62,22 @@ gulp.task('build:app', function() {
  * Precompile the style and move it to ./build
  **/
 gulp.task('move:css', function() {
+	<% if (props.css_preprocessor == 'none') { %>
+  return gulp.src('./app/app.css')
+	<% } %>
+	<% if (props.css_preprocessor != 'none') { %>
+		<% if (props.css_preprocessor == 'sass') { %>
   return gulp.src('./app/app.scss')
-    .pipe(sourcemaps.init())
-    .pipe(sass())
-    .pipe(sourcemaps.write())
+		.pipe(sourcemaps.init())
+		.pipe(sass())
+		<% } %>
+		<% if (props.css_preprocessor == 'less') { %>
+  return gulp.src('./app/app.less')
+		.pipe(sourcemaps.init())
+		.pipe(less())
+		<% } %>
+		.pipe(sourcemaps.write())
+	<% } %>
     .pipe(gulp.dest('./build'));
 });
 
