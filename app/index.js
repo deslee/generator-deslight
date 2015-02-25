@@ -147,7 +147,9 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 		pkgs.devDependencies.reactify = '*'
 		this.props.libs = this.props.libs.concat(this.react_libraries);
 
-		this.directory('_react/routes/', 'app/routes/');
+		this.copy('_react/routes/HomeRouteHandler.js', 'app/routes/HomeRouteHandler.js');
+		this.copy('_react/routes/RootRouteHandler.js', 'app/routes/RootRouteHandler.js');
+		this.copy('_react/routes/NotFoundRouteHandler.js', 'app/routes/NotFoundRouteHandler.js');
 	}
 });
 

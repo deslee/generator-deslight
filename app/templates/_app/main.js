@@ -12,10 +12,12 @@ var NotFoundRoute = Router.NotFoundRoute;
 
 var RootRouteHandler = require('./routes/RootRouteHandler')
 var HomeRoute = require('./routes/HomeRouteHandler');
+var NotFoundRouteHandler = require('./routes/NotFoundRouteHandler');
 
 var routes = (
 	<Route handler={RootRouteHandler} path="/">
 		<DefaultRoute handler={HomeRoute} />
+		<NotFoundRoute handler={NotFoundRouteHandler} />
 	</Route>
 );
 
