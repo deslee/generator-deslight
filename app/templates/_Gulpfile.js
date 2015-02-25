@@ -19,8 +19,7 @@ var build_options = {
 	'isDev': true
 };
 
-var external_libraries = [
-];
+var external_libraries = <%= JSON.stringify(props.libs) %>
 
 /**
  * Browserify the external vendors and move them to ./build
