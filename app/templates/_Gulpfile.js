@@ -40,7 +40,7 @@ gulp.task('build:vendor', function() {
 gulp.task('build:app', function() {
   return gulp.src('./app/main.js', {read: false})
 		.pipe(browserify({
-			transform: [],
+			transform: <%= browserify_transforms %>,
 			debug: process.env.NODE_ENV != 'production'
 		}))
 		.on('prebundle', function(bundle) {
