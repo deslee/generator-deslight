@@ -9,6 +9,14 @@
 </head>
 
 <body>
+
+<% if (props.frameworks == 'react' ) { %>
+	<div id="root_<%= _.slugify(appname) %>">
+
+	</div>
+<% } %>
+
+<% if (props.frameworks == 'none' ) { %>
 	<h1>Hello world!</h1>
 
 	<p>This is my webdev seed!</p>
@@ -26,6 +34,7 @@
 			<dd>Currently uses jquery as the only dependency, but you can remove it!</dd>
 			<dd>The convention is, front-end modules are <code>dependencies</code>, while back-end modules are <code>devDependencies</code></dd>
 	</dl>
+<% } %>
 
 	<script src="vendor.js"></script>
 	<script src="app.js"></script>

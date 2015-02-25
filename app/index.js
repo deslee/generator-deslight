@@ -8,6 +8,7 @@ var utils = require('./utils');
 
 var DeslightGenerator = yeoman.generators.Base.extend({
 	initializing: function () {
+		this.react_libraries = ['react', 'react-router', 'object-assign', 'flux', 'keymirror'];
 		this.pkg = require('../package.json');
 	},
 
@@ -86,11 +87,9 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 
 	writing: {
 		app: function () {
-			console.log(this.props);
 			/*create package.json*/
 			var pkgs = this.fs.readJSON(this.templatePath('_package.json'));
 
-			utils.addDependencies(pkgs, this.props.libs);
 
 			this.browserify_transforms = [];
 
@@ -115,6 +114,9 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 					this._handle_react_package(pkgs);
 				break;
 			}
+
+			utils.addDependencies(pkgs, this.props.libs);
+			console.log(this.props);
 
 			this.fs.write(this.destinationPath('package.json'), JSON.stringify(pkgs, null, 2));
 			//then, compile the template
@@ -143,8 +145,9 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 	_handle_react_package: function(pkgs) {
 		this.browserify_transforms.push('reactify');
 		pkgs.devDependencies.reactify = '*'
-		var react_libraries = ['react', 'react-router', 'object-assign', 'flux', 'keymirror'];
-		utils.addDependencies(pkgs, react_libraries);
+		this.props.libs = this.props.libs.concat(this.react_libraries);
+
+		this.directory('_react/routes/', 'app/routes/');
 	}
 });
 

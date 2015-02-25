@@ -62,7 +62,7 @@ gulp.task('build:app', function() {
  **/
 gulp.task('move:css', function() {
 	<% if (props.css_preprocessor == 'none') { %>
-  return gulp.src('./app/app.css')
+  return gulp.src('./app/**/*.css')
 	<% } %>
 	<% if (props.css_preprocessor != 'none') { %>
 		<% if (props.css_preprocessor == 'sass') { %>
@@ -138,7 +138,18 @@ gulp.task('watch', function() {
 
   watch('./app/index.html', 'move:html');
   watch('./app/**/*.js', 'build:app');
+
+
+	<% if (props.css_preprocessor == 'none') { %>
+  watch('./app/**/*.css', 'move:css');
+	<% } %>
+	<% if (props.css_preprocessor == 'sass') { %>
   watch('./app/**/*.scss', 'move:css');
+	<% } %>
+	<% if (props.css_preprocessor == 'less') { %>
+  watch('./app/**/*.lcss', 'move:css');
+	<% } %>
+
   watch('./app/assets/**/*', 'move:assets');
 });
 
