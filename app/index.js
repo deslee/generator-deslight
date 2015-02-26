@@ -165,6 +165,8 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 		this.copy('_react/routes/HomeRouteHandler.js', 'app/routes/HomeRouteHandler.js');
 		this.copy('_react/routes/RootRouteHandler.js', 'app/routes/RootRouteHandler.js');
 		this.copy('_react/routes/NotFoundRouteHandler.js', 'app/routes/NotFoundRouteHandler.js');
+
+		this.config.save();
 	}
 });
 

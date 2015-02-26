@@ -14,10 +14,14 @@ var RootRouteHandler = require('./routes/RootRouteHandler')
 var HomeRoute = require('./routes/HomeRouteHandler');
 var NotFoundRouteHandler = require('./routes/NotFoundRouteHandler');
 
+
+/* deslight require hook - do not modify this line */
+
 var routes = (
 	<Route handler={RootRouteHandler} path="/">
 		<DefaultRoute handler={HomeRoute} />
 		<NotFoundRoute handler={NotFoundRouteHandler} />
+/* deslight route hook - do not modify this line */
 	</Route>
 );
 

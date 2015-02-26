@@ -20,7 +20,9 @@
     "test": "mocha"
   },
   "files": [
-    "app"
+    "app",
+    "react-route",
+    "react-component"
   ],
   "keywords": [
     "yeoman-generator",
