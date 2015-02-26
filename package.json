@@ -37,7 +37,6 @@
     "yosay": "^1.0.2"
   },
   "devDependencies": {
-    "lodash": "^3.3.1",
     "mocha": "*"
   }
 }

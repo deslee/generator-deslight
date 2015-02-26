@@ -123,7 +123,21 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 			this.fs.copyTpl(this.destinationPath('package.json'), this.destinationPath('package.json'), this);
 
 			this.template('_bower.json', 'bower.json');
-			this.template('_Gulpfile.js', 'Gulpfile.js');
+			this.template('_Gulpfile.js', 'Gulpfile.js', {
+				props: {
+					libs: this.props.libs.map(function(lib) {
+						if (lib == 'react') {
+							return 'react/addons';
+						}
+						return lib;
+					}),
+					css_preprocessor: this.props.css_preprocessor
+				},
+				browserify_transforms: this.browserify_transforms,
+				appname: this.appname
+			});
+
+			this.template('README.md', 'README.md');
 
 			this.template('_app/index.html', 'app/index.html');
 			this.copy('_app/noop.js', 'app/noop.js');
@@ -145,13 +159,9 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 	_handle_react_package: function(pkgs) {
 		this.browserify_transforms.push('reactify');
 		pkgs.devDependencies.reactify = '*'
-		this.props.libs = this.props.libs.concat(this.react_libraries.map(function(lib) {
-			if (lib == 'react') {
-				return 'react/addons'
-			}				
-			return lib;
-		}));
 
+		this.props.libs = this.props.libs.concat(this.react_libraries);
+		
 		this.copy('_react/routes/HomeRouteHandler.js', 'app/routes/HomeRouteHandler.js');
 		this.copy('_react/routes/RootRouteHandler.js', 'app/routes/RootRouteHandler.js');
 		this.copy('_react/routes/NotFoundRouteHandler.js', 'app/routes/NotFoundRouteHandler.js');
