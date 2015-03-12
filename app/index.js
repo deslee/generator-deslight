@@ -8,7 +8,7 @@ var utils = require('./utils');
 
 var DeslightGenerator = yeoman.generators.Base.extend({
 	initializing: function () {
-		this.react_libraries = ['react', 'react-router', 'object-assign', 'flux', 'keymirror'];
+		this.react_libraries = [['react', '^0.12.0'], 'react-router', 'object-assign', 'flux', 'keymirror'];
 		this.pkg = require('../package.json');
 	},
 
@@ -69,7 +69,7 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 				},
 				{
 					value: 'react',
-					name: 'Flux / React with React Router'
+					name: 'React with React Router and Jest unit testing'
 				}]
 			}];
 
@@ -123,13 +123,16 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 			this.fs.copyTpl(this.destinationPath('package.json'), this.destinationPath('package.json'), this);
 
 			this.template('_bower.json', 'bower.json');
+			this.template('preprocessor.js', 'preprocessor.js');
 			this.template('_Gulpfile.js', 'Gulpfile.js', {
 				props: {
 					libs: this.props.libs.map(function(lib) {
-						if (lib == 'react') {
+						var lib_name = typeof(lib) === 'string' ? lib : lib[0];
+						if (lib_name == 'react') {
 							return 'react/addons';
 						}
-						return lib;
+
+						return lib_name;
 					}),
 					css_preprocessor: this.props.css_preprocessor
 				},
@@ -142,6 +145,8 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 			this.template('_app/index.html', 'app/index.html');
 			this.copy('_app/noop.js', 'app/noop.js');
 			this.copy('_app/main.js', 'app/main.js');
+
+			this.config.save();
 		},
 
 		projectfiles: function () {
@@ -159,6 +164,15 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 	_handle_react_package: function(pkgs) {
 		this.browserify_transforms.push('reactify');
 		pkgs.devDependencies.reactify = '*'
+		pkgs.devDependencies['jest-cli'] = '*'
+		pkgs.devDependencies['react-tools'] = '*'
+
+		pkgs.scripts.test = 'jest';
+
+		pkgs.jest = {
+			scriptPreprocessor: "<rootDir>/preprocessor.js",
+			unmockedModulePathPatterns: ["<rootDir>/node_modules/react"]
+		}
 
 		this.props.libs = this.props.libs.concat(this.react_libraries);
 		
@@ -166,7 +180,6 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 		this.copy('_react/routes/RootRouteHandler.js', 'app/routes/RootRouteHandler.js');
 		this.copy('_react/routes/NotFoundRouteHandler.js', 'app/routes/NotFoundRouteHandler.js');
 
-		this.config.save();
 	}
 });
 
