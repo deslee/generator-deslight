@@ -123,7 +123,6 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 			this.fs.copyTpl(this.destinationPath('package.json'), this.destinationPath('package.json'), this);
 
 			this.template('_bower.json', 'bower.json');
-			this.template('preprocessor.js', 'preprocessor.js');
 			this.template('_Gulpfile.js', 'Gulpfile.js', {
 				props: {
 					libs: this.props.libs.map(function(lib) {
@@ -176,6 +175,7 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 
 		this.props.libs = this.props.libs.concat(this.react_libraries);
 		
+		this.template('preprocessor.js', 'preprocessor.js');
 		this.copy('_react/routes/HomeRouteHandler.js', 'app/routes/HomeRouteHandler.js');
 		this.copy('_react/routes/RootRouteHandler.js', 'app/routes/RootRouteHandler.js');
 		this.copy('_react/routes/NotFoundRouteHandler.js', 'app/routes/NotFoundRouteHandler.js');
