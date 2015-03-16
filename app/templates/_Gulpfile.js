@@ -120,6 +120,7 @@ gulp.task('main', function(cb) {
 gulp.task('serve', function() {
 	return gulp.src('./build')
 	.pipe(webserver({
+		host: '0.0.0.0',
 		port: process.env.PORT || 8000
 	}));
 });
