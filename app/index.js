@@ -8,7 +8,7 @@ var utils = require('./utils');
 
 var DeslightGenerator = yeoman.generators.Base.extend({
 	initializing: function () {
-		this.react_libraries = [['react', '^0.12.0'], 'react-router', 'object-assign', 'flux', 'keymirror'];
+		this.react_libraries = ['react', 'react-router', 'object-assign', 'flux', 'keymirror'];
 		this.pkg = require('../package.json');
 	},
 
