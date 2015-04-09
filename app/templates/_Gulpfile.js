@@ -149,7 +149,7 @@ gulp.task('watch', function() {
 	watch('./app/**/*.scss', 'move:css');
 	<% } %>
 	<% if (props.css_preprocessor == 'less') { %>
-	watch('./app/**/*.lcss', 'move:css');
+	watch('./app/**/*.less', 'move:css');
 	<% } %>
 
 	watch('./app/assets/**/*', 'move:assets');
