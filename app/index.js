@@ -38,6 +38,10 @@ var DeslightGenerator = yeoman.generators.Base.extend({
 				{
 					value: 'lodash',
 					name: 'lodash'
+				},
+				{
+					value: 'moment',
+					name: 'Moment.js'
 				}]
 			},
 			{
