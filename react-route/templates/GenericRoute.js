@@ -1,12 +1,10 @@
 var React = require('react/addons');
 var Router = require('react-router');
-var RouteHandler = Router.RouteHandler;
+var classNames = require('classnames')
 
 module.exports = React.createClass({
-	mixins: [ Router.State ],
+	mixins: [ Router.State, Router.Navigation ],
 	render: function() {
-		var route = this.getRoutes();
-		
 		return (
 			<div>
 				<h2><%= name %></h2>

@@ -1,4 +1,5 @@
 var React = require('react/addons');
+var classNames = require('classnames')
 
 module.exports = React.createClass({
 	render: function() {
