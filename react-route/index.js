@@ -1,5 +1,6 @@
 'use strict';
 var yeoman = require('yeoman-generator');
+var fs = require('fs')
 
 module.exports = yeoman.generators.Base.extend({
 	initializing: function () {
@@ -10,6 +11,7 @@ module.exports = yeoman.generators.Base.extend({
 			type: String,
 			desc: 'The subgenerator name'
 		});
+		this.styleHook = '/* deslight style hook - do not modify this line */'
 	},
 
 	prompting: {
@@ -47,11 +49,11 @@ module.exports = yeoman.generators.Base.extend({
 
 	writing: {
 		add_route: function() {
-			this.template('GenericRoute.js', 'app/routes/'+ this.name + 'RouteHandler.js');
+			this.template('GenericRoute.js', 'app/routes/'+ this.name + '/' + this.name + 'RouteHandler.js');
 		},
 		add_hook: function() {
 			var routeInsert = '<Route handler={'+ this.name + 'RouteHandler} name=\''+this.name+'\' path=\''+this.path+'\'/>';
-			var requireInsert = 'var ' + this.name + 'RouteHandler = require(\'./routes/' + this.name + 'RouteHandler\');';
+			var requireInsert = 'var ' + this.name + 'RouteHandler = require(\'./routes/' + this.name + '/' + this.name + 'RouteHandler\');';
 			var path = this.destinationPath('./app/main.js');
 			var contents = this.readFileAsString(path);
 
@@ -60,16 +62,43 @@ module.exports = yeoman.generators.Base.extend({
 					contents = contents.replace(hook, insert+'\n'+hook)
 				}
 			}
-
 			insertText(this.requireHook, requireInsert);
 			insertText(this.routeHook, routeInsert);
 
 			this.write(path, contents);
+		},
+		add_styling: function() {
+			var masterStyleFile = fs.readdirSync(this.destinationPath('app')).filter(function(filename) {
+				var test = /app\.(css|less|scss)$/.test(filename)
+				return test
+			})[0]
+			var ext = masterStyleFile.split('.')[1]
 
-			//this.fs.copy(
-			//this.templatePath('somefile.js'),
-			//this.destinationPath('somefile.js')
-			//);
+			var masterContents = this.readFileAsString(this.destinationPath('app/' + masterStyleFile))
+
+			var insertText = function(hook, insert) {
+				if (masterContents.indexOf(insert) === -1) {
+					masterContents= masterContents.replace(hook, insert+'\n'+hook)
+				}
+			}
+
+			var styleFile = this.name + '.' + ext;
+			this.template('GenericRoute.css', 'app/routes/'+ this.name + '/' + this.name + '.' + ext);
+
+			switch (ext) {
+				case 'css':
+					insertText(this.styleHook, '@import "routes/' + this.name + '/' + this.name + '.' + ext+'"');
+				break;
+				case 'scss':
+					insertText(this.styleHook, '@import "routes/' + this.name + '/' + this.name+'";');
+				break;
+				case 'less':
+					insertText(this.styleHook, '@import "routes/' + this.name + '/' + this.name+'";');
+				break;
+			}
+
+			this.write('app/' + masterStyleFile, masterContents);
+
 		}
 	}
 });

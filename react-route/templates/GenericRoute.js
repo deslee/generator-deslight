@@ -6,7 +6,7 @@ module.exports = React.createClass({
 	mixins: [ Router.State, Router.Navigation ],
 	render: function() {
 		return (
-			<div>
+			<div className="<%= _.slugify(name) %>">
 				<h2><%= name %></h2>
 			</div>
 		);

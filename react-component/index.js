@@ -1,5 +1,6 @@
 'use strict';
 var yeoman = require('yeoman-generator');
+var fs = require('fs')
 
 module.exports = yeoman.generators.Base.extend({
 	initializing: function () {
@@ -8,6 +9,7 @@ module.exports = yeoman.generators.Base.extend({
 			type: String,
 			desc: 'The subgenerator name'
 		});
+		this.styleHook = '/* deslight style hook - do not modify this line */'
 	},
 
 	prompting: {
@@ -36,12 +38,44 @@ module.exports = yeoman.generators.Base.extend({
 	},
 
 	writing: {
-		add_route: function() {
-			this.template('GenericComponent.js', 'app/components/'+ this.name + '.js');
-
-			this.template('__tests__/GenericComponent-test.js', 'app/components/__tests__/' + this.name + '-test.js', {
+		add_component: function() {
+			this.template('GenericComponent.js', 'app/components/'+ this.name +'/'+ this.name + '.js');
+			this.template('__tests__/GenericComponent-test.js', 'app/components/__tests__/' + this.name+'/' + this.name + '-test.js', {
 				name: this.name
 			});
+		},
+
+		add_styling: function() {
+			var masterStyleFile = fs.readdirSync(this.destinationPath('app')).filter(function(filename) {
+				return /app\.(css|less|scss)$/.test(filename)
+			})[0]
+			var ext = masterStyleFile.split('.')[1]
+
+			var masterContents = this.readFileAsString(this.destinationPath('app/' + masterStyleFile))
+
+			var insertText = function(hook, insert) {
+				if (masterContents.indexOf(insert) === -1) {
+					masterContents= masterContents.replace(hook, insert+'\n'+hook)
+				}
+			}
+
+			var styleFile = this.name + '.' + ext;
+			this.template('GenericComponent.css', 'app/components/'+ this.name + '.' + ext);
+
+			switch (ext) {
+				case 'css':
+					insertText(this.styleHook, '@import "components/' + this.name + '/' + this.name + '.' + ext+'"');
+				break;
+				case 'scss':
+					insertText(this.styleHook, '@import "components/' + this.name + '/' + this.name+'";');
+				break;
+				case 'less':
+					insertText(this.styleHook, '@import "components/' + this.name + '/' + this.name+'";');
+				break;
+			}
+
+			this.write('app/' + masterStyleFile, masterContents);
 		}
+
 	}
 });

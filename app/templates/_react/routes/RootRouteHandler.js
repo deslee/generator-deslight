@@ -10,7 +10,7 @@ module.exports = React.createClass({
 		return (
 			<div>
 				<header><h1>{route}</h1></header>
-				<main>
+				<main className="main_root">
 					<RouteHandler />
 				</main>
 			</div>

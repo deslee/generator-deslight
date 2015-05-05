@@ -4,7 +4,7 @@ var classNames = require('classnames')
 module.exports = React.createClass({
 	render: function() {
 		return (
-			<div>
+			<div className="<%= _.slugify(name) %>">
 			</div>
 		);
 	}
