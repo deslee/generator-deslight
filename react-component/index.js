@@ -60,7 +60,7 @@ module.exports = yeoman.generators.Base.extend({
 			}
 
 			var styleFile = this.name + '.' + ext;
-			this.template('GenericComponent.css', 'app/components/'+ this.name + '.' + ext);
+			this.template('GenericComponent.css', 'app/components/'+ this.name + '/' + this.name + '.' + ext);
 
 			switch (ext) {
 				case 'css':
